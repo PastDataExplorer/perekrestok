@@ -52,7 +52,7 @@ class PerekrestokAllItem(scrapy.Item):
     )
     product_name = scrapy.Field(
         output_processor=TakeFirst()
-    )
+    )    
     vendor = scrapy.Field(
         output_processor=TakeFirst()
     )
