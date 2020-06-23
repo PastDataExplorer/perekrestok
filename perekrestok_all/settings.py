@@ -63,9 +63,12 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'perekrestok_all.pipelines.PerekrestokAllPipeline': 300,
-#}
+ITEM_PIPELINES = {
+  'perekrestok_all.pipelines.PostgresqlPipeline': 300,
+  #  'perekrestok_all.pipelines.FilterDuplicate': 100,
+}
+
+POSTGRESQL_URI = "Hello world!!!"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
