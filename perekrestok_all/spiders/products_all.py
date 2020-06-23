@@ -38,7 +38,7 @@ class ProductsAllSpider(CrawlSpider):
             loader.add_xpath("country", "//*[contains(text(),'Страна')]/following-sibling::*/a/text()")
             loader.add_xpath("regular_price", "(//@data-cost)[1]")
             loader.add_xpath("regular_price", "(//@data-cost)[last()]")
-            loader.add_xpath("sale_price", "(//@data-cost)[last()]")
+            loader.add_xpath("sale_price", "(//@data-cost)[1]")
             loader.add_xpath("unit", "(//span[@class = 'js-fraction-text']/text())[1]")
             loader.add_xpath("availability", "//div[@id='main-app']/div[@itemtype]/div/@data-gtm-is-available")
             loader.add_xpath("link", "//link[@rel='canonical']/@href")

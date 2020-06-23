@@ -30,7 +30,7 @@ def to_int(number):
     else:
         return None
 def to_bool(number):
-    if number == 1:
+    if number == "1":
         return True
     else:
         return False
