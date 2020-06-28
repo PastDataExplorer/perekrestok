@@ -25,8 +25,8 @@ CREATE_CATEGORIES_TABLE = """CREATE TABLE IF NOT EXISTS categories(
 );"""
 
 CREATE_VENDORS_TABLE = """CREATE TABLE IF NOT EXISTS vendors(
-    vendor_key SERIAL PRIMARY KEY,
-    vendor_id INT UNIQUE,
+--    vendor_key SERIAL PRIMARY KEY,
+    vendor_id INT PRIMARY KEY,
     vendor TEXT
 );"""
 
@@ -42,12 +42,13 @@ CREATE_PRODUCTS_TABLE = """CREATE TABLE IF NOT EXISTS products(
 
 CREATE_PRICES_TABLE = """CREATE TABLE IF NOT EXISTS prices(
     date_time DATE DEFAULT CURRENT_DATE, 
-    product_id INT PRIMARY KEY,
+    product_id INT,
     regular_price NUMERIC(10, 2),
     sale_price NUMERIC(10, 2),
     availability BOOLEAN,
     UNIQUE (date_time, product_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    CONSTRAINT date_product_id PRIMARY KEY (date_time, product_id)
+--    FOREIGN KEY (product_id) REFERENCES products(product_id)
 );"""
 
 # --- INSERT ----
@@ -58,10 +59,11 @@ INSERT_CATEGORIES = """INSERT INTO categories
         second_level_cat)
     VALUES (%s, %s, %s, %s)
     ON CONFLICT(category_id)
-    DO UPDATE SET
-        category_name = categories.category_name,
-        first_level_cat = categories.first_level_cat,
-        second_level_cat = categories.second_level_cat
+    DO NOTHING
+--    DO UPDATE SET
+--        category_name = categories.category_name,
+--        first_level_cat = categories.first_level_cat,
+--        second_level_cat = categories.second_level_cat
     ;"""
 
 INSERT_VENDORS = """INSERT INTO vendors
@@ -69,8 +71,9 @@ INSERT_VENDORS = """INSERT INTO vendors
         vendor)
     VALUES (%s, %s)
     ON CONFLICT(vendor_id)
-    DO UPDATE SET
-        vendor = vendors.vendor
+    DO NOTHING
+--    DO UPDATE SET
+--        vendor = vendors.vendor
     ;"""
 
 INSERT_PRODUCTS = """INSERT INTO products
@@ -100,10 +103,11 @@ INSERT_PRICES = """INSERT INTO prices
         availability)
     VALUES (NOW(), %s, %s, %s, %s)
     ON CONFLICT(date_time, product_id)
-    DO UPDATE SET
-        regular_price = prices.regular_price,
-        sale_price = prices.sale_price,
-        availability = prices.availability
+    DO NOTHING
+--    DO UPDATE SET
+--        regular_price = prices.regular_price,
+--        sale_price = prices.sale_price,
+--        availability = prices.availability
     ;"""
 
 
@@ -134,10 +138,11 @@ class PostgresqlPipeline(object):
                     item.get('second_level_cat'))
                 )
 
-                cursor.execute(INSERT_VENDORS,
-                    (item.get('vendor_id'),
-                    item.get('vendor'))
-                )
+                if item.get('vendor_id'):
+                    cursor.execute(INSERT_VENDORS,
+                        (item.get('vendor_id'),
+                        item.get('vendor'))
+                    )
 
                 cursor.execute(INSERT_PRODUCTS,
                     (item.get('product_id'),
