@@ -11,15 +11,17 @@ class ProductsAllSpider(CrawlSpider):
     name = 'products_all'
     allowed_domains = ['www.perekrestok.ru']
     start_urls = [
-        # 'https://www.perekrestok.ru/catalog/ovoschi-frukty-griby/',
-        # 'https://www.perekrestok.ru/catalog/ryba-i-moreprodukty/',
-        # 'https://www.perekrestok.ru/catalog/posuda',
         'https://www.perekrestok.ru/catalog'
     ]
 
     rules = [Rule(LinkExtractor(
-        # allow=,
         deny='(/reviews)',
+        #need to restrict xpaths in order to make requests to products web-pages
+        restrict_xpaths = [
+            "//div[@data-id]/div[@class='xf-product__picture xf-product-picture']",
+            "//li[@class='xf-catalog-categories__item']/a",
+            "//div[@class='xf-paginator__items']/a"
+        ]
     ), callback='parse_product', follow=True)]
 
 
