@@ -15,7 +15,9 @@ class ProductsAllSpider(CrawlSpider):
     ]
 
     rules = [Rule(LinkExtractor(
-        deny='(/reviews)',
+        deny=['/reviews',
+            '/promos'
+            ],
         #need to restrict xpaths in order to make requests to products web-pages
         restrict_xpaths = [
             "//div[@data-id]/div[@class='xf-product__picture xf-product-picture']",
